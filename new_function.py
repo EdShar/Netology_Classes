@@ -97,6 +97,7 @@ def average_students(students, course):
 
     return average_rates / average_len
 
+
 def average_lectors(lectors, course):
     average_rates = 0
     average_len = 0
