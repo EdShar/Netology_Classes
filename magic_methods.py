@@ -18,8 +18,9 @@ class Student:
             return 'Ошибка'
 
     def __str__(self):
-        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.average_rating()}\n' \
-              f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\nЗавершенные курсы: {", ".join(self.finished_courses)}'
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: ' \
+              f'{self.average_rating()}\nКурсы в процессе изучения: {", ".join(self.courses_in_progress)}' \
+              f'\nЗавершенные курсы: {", ".join(self.finished_courses)}'
 
         return res
 
@@ -30,6 +31,10 @@ class Student:
                 average += rate
 
         return average / len(self.grades)
+
+    def __lt__(self, other):
+        if isinstance(other, Student):
+            return self.average_rating() < other.average_rating()
 
 
 class Mentor:
@@ -58,6 +63,10 @@ class Lecturer(Mentor):
 
         return average / len(self.grades)
 
+    def __lt__(self, other):
+        if isinstance(other, Lecturer):
+            return self.average_rating() < other.average_rating()
+
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -82,18 +91,35 @@ some_student = Student('Ruoy', 'Eman', 'man')
 some_student.courses_in_progress += ['Python', 'Git']
 some_student.finished_courses += ['Введение в программирование']
 
+new_student = Student('Alex', 'Parker', 'man')
+new_student.courses_in_progress += ['Python', 'Git']
+
 some_reviewer = Reviewer('Some', 'Boddy')
 some_reviewer.courses_attached += ['Python', 'Git', 'Java', 'C']
+
 some_lecturer = Lecturer('Some', 'Boddy')
 some_lecturer.courses_attached += ['Python', 'Git', 'Java']
+
+new_lecturer = Lecturer('Grace', 'Dilly')
+new_lecturer.courses_attached += ['Python', 'Git', 'Java']
 
 some_student.rate_lector(some_lecturer, 'Python', 10)
 some_student.rate_lector(some_lecturer, 'Git', 7)
 some_student.rate_lector(some_lecturer, 'Java', 8)
 
+new_student.rate_lector(new_lecturer, 'Python', 5)
+new_student.rate_lector(new_lecturer, 'Git', 3)
+new_student.rate_lector(new_lecturer, 'Java', 6)
+
 some_reviewer.rate_hw(some_student, 'Python', 9)
 some_reviewer.rate_hw(some_student, 'Git', 4)
 
+some_reviewer.rate_hw(new_student, 'Python', 10)
+some_reviewer.rate_hw(new_student, 'Git', 8)
+
 print(f'Reviewer:\n{some_reviewer}\n\n')
 print(f'Lecturer:\n{some_lecturer}\n\n')
-print(f'Student:\n{some_student}')
+print(f'Student:\n{some_student}\n')
+
+print(some_lecturer < new_lecturer)
+print(some_student < new_student)
